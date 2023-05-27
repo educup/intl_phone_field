@@ -1,3 +1,13 @@
+# CHANGELOG
+
+## [3.2.0] - Release
+
+- Add support to Flutter 3.10.0 and Dart 3.0
+- Remove deprecated `searchText` parameter
+- Fix input field to only accepts numbers
+- Fix mix/max length to Italy, South Korea, Dominican Republic phone numbers
+- Add `linter` to dev dependencies and fix linting issues
+
 ## [3.1.0] - Release
 
 - **Breaking** `validator` function parameter type is [PhoneNumber] now instead of [String].
