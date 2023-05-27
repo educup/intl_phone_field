@@ -1,4 +1,4 @@
-import 'countries.dart';
+import 'package:intl_phone_field/countries.dart';
 
 class NumberTooLongException implements Exception {}
 
@@ -7,9 +7,6 @@ class NumberTooShortException implements Exception {}
 class InvalidCharactersException implements Exception {}
 
 class PhoneNumber {
-  String countryISOCode;
-  String countryCode;
-  String number;
 
   PhoneNumber({
     required this.countryISOCode,
@@ -18,12 +15,12 @@ class PhoneNumber {
   });
 
   factory PhoneNumber.fromCompleteNumber({required String completeNumber}) {
-    if (completeNumber == "") {
-      return PhoneNumber(countryISOCode: "", countryCode: "", number: "");
+    if (completeNumber == '') {
+      return PhoneNumber(countryISOCode: '', countryCode: '', number: '');
     }
 
     try {
-      Country country = getCountry(completeNumber);
+      final Country country = getCountry(completeNumber);
       String number;
       if (completeNumber.startsWith('+')) {
         number = completeNumber
@@ -35,16 +32,19 @@ class PhoneNumber {
       return PhoneNumber(
           countryISOCode: country.code,
           countryCode: country.dialCode + country.regionCode,
-          number: number);
+          number: number,);
     } on InvalidCharactersException {
       rethrow;
     } on Exception catch (_) {
-      return PhoneNumber(countryISOCode: "", countryCode: "", number: "");
+      return PhoneNumber(countryISOCode: '', countryCode: '', number: '');
     }
   }
+  String countryISOCode;
+  String countryCode;
+  String number;
 
   bool isValidNumber() {
-    Country country = getCountry(completeNumber);
+    final Country country = getCountry(completeNumber);
     if (number.length < country.minLength) {
       throw NumberTooShortException();
     }
@@ -60,13 +60,13 @@ class PhoneNumber {
   }
 
   static Country getCountry(String phoneNumber) {
-    if (phoneNumber == "") {
+    if (phoneNumber == '') {
       throw NumberTooShortException();
     }
 
-    final _validPhoneNumber = RegExp(r'^[+0-9]*[0-9]*$');
+    final validPhoneNumber = RegExp(r'^[+0-9]*[0-9]*$');
 
-    if (!_validPhoneNumber.hasMatch(phoneNumber)) {
+    if (!validPhoneNumber.hasMatch(phoneNumber)) {
       throw InvalidCharactersException();
     }
 
@@ -78,9 +78,10 @@ class PhoneNumber {
       );
     }
     return countries.firstWhere((country) =>
-        phoneNumber.startsWith(country.dialCode + country.regionCode));
+        phoneNumber.startsWith(country.dialCode + country.regionCode),);
   }
 
+  @override
   String toString() =>
       'PhoneNumber(countryISOCode: $countryISOCode, countryCode: $countryCode, number: $number)';
 }

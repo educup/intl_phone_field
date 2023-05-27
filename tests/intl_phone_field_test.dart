@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class TestWidget extends StatelessWidget {
-  const TestWidget({Key? key, required this.phoneNumber, this.countryCode}) : super(key: key);
+  const TestWidget({super.key, required this.phoneNumber, this.countryCode});
 
   final String phoneNumber;
   final String? countryCode;
@@ -13,21 +13,21 @@ class TestWidget extends StatelessWidget {
     return MaterialApp(
         title: 'Test Intl Phone Field',
         home: Scaffold(
-          appBar: AppBar(title: Text("")),
+          appBar: AppBar(title: const Text('')),
           body: IntlPhoneField(
             initialValue: phoneNumber,
             initialCountryCode: countryCode,
           ),
-        ));
+        ),);
   }
 }
 
 void main() {
   testWidgets('Test intl_phone_field setup with completeNumber',
       (WidgetTester tester) async {
-    await tester.pumpWidget(TestWidget(
+    await tester.pumpWidget(const TestWidget(
       phoneNumber: '+447891234467',
-    ));
+    ),);
 
     final countryCodeFinder = find.text('+44');
     final numberFinder = find.text('7891234467');
@@ -38,10 +38,10 @@ void main() {
 
   testWidgets('Test intl_phone_field setup with Guernsey number: +441481960194',
           (WidgetTester tester) async {
-        await tester.pumpWidget(TestWidget(
+        await tester.pumpWidget(const TestWidget(
           phoneNumber: '+441481960194',
           countryCode: 'GG',
-        ));
+        ),);
 
         final countryCodeFinder = find.text('+44 1481');
         final numberFinder = find.text('960194');
@@ -52,10 +52,10 @@ void main() {
 
   testWidgets('Test intl_phone_field setup with UK number: +447891244567',
           (WidgetTester tester) async {
-        await tester.pumpWidget(TestWidget(
+        await tester.pumpWidget(const TestWidget(
           phoneNumber: '+447891244567',
           countryCode: 'GB',
-        ));
+        ),);
 
         final countryCodeFinder = find.text('+44');
         final numberFinder = find.text('7891244567');

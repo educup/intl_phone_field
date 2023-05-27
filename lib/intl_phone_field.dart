@@ -1,15 +1,58 @@
-library intl_phone_field;
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
-
-import './countries.dart';
-import './phone_number.dart';
+import 'package:intl_phone_field/phone_number.dart';
 
 class IntlPhoneField extends StatefulWidget {
+  const IntlPhoneField({
+    super.key,
+    this.initialCountryCode,
+    this.obscureText = false,
+    this.textAlign = TextAlign.left,
+    this.textAlignVertical,
+    this.onTap,
+    this.readOnly = false,
+    this.initialValue,
+    this.keyboardType = TextInputType.phone,
+    this.controller,
+    this.focusNode,
+    this.decoration = const InputDecoration(),
+    this.style,
+    this.dropdownTextStyle,
+    this.onSubmitted,
+    this.validator,
+    this.onChanged,
+    this.countries,
+    this.onCountryChanged,
+    this.onSaved,
+    this.showDropdownIcon = true,
+    this.dropdownDecoration = const BoxDecoration(),
+    this.inputFormatters,
+    this.enabled = true,
+    this.keyboardAppearance,
+    @Deprecated('Use searchFieldInputDecoration of PickerDialogStyle instead')
+        this.searchText = 'Search country',
+    this.dropdownIconPosition = IconPosition.leading,
+    this.dropdownIcon = const Icon(Icons.arrow_drop_down),
+    this.autofocus = false,
+    this.textInputAction,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    this.showCountryFlag = true,
+    this.cursorColor,
+    this.disableLengthCheck = false,
+    this.flagsButtonPadding = EdgeInsets.zero,
+    this.invalidNumberMessage = 'Invalid Mobile Number',
+    this.cursorHeight,
+    this.cursorRadius = Radius.zero,
+    this.cursorWidth = 2.0,
+    this.showCursor = true,
+    this.pickerDialogStyle,
+    this.flagsButtonMargin = EdgeInsets.zero,
+  });
+
   /// Whether to hide the text being edited (e.g., for passwords).
   final bool obscureText;
 
@@ -237,52 +280,6 @@ class IntlPhoneField extends StatefulWidget {
   /// If unset, defaults to [EdgeInsets.zero].
   final EdgeInsets flagsButtonMargin;
 
-  IntlPhoneField({
-    Key? key,
-    this.initialCountryCode,
-    this.obscureText = false,
-    this.textAlign = TextAlign.left,
-    this.textAlignVertical,
-    this.onTap,
-    this.readOnly = false,
-    this.initialValue,
-    this.keyboardType = TextInputType.phone,
-    this.controller,
-    this.focusNode,
-    this.decoration = const InputDecoration(),
-    this.style,
-    this.dropdownTextStyle,
-    this.onSubmitted,
-    this.validator,
-    this.onChanged,
-    this.countries,
-    this.onCountryChanged,
-    this.onSaved,
-    this.showDropdownIcon = true,
-    this.dropdownDecoration = const BoxDecoration(),
-    this.inputFormatters,
-    this.enabled = true,
-    this.keyboardAppearance,
-    @Deprecated('Use searchFieldInputDecoration of PickerDialogStyle instead')
-        this.searchText = 'Search country',
-    this.dropdownIconPosition = IconPosition.leading,
-    this.dropdownIcon = const Icon(Icons.arrow_drop_down),
-    this.autofocus = false,
-    this.textInputAction,
-    this.autovalidateMode = AutovalidateMode.onUserInteraction,
-    this.showCountryFlag = true,
-    this.cursorColor,
-    this.disableLengthCheck = false,
-    this.flagsButtonPadding = EdgeInsets.zero,
-    this.invalidNumberMessage = 'Invalid Mobile Number',
-    this.cursorHeight,
-    this.cursorRadius = Radius.zero,
-    this.cursorWidth = 2.0,
-    this.showCursor = true,
-    this.pickerDialogStyle,
-    this.flagsButtonMargin = EdgeInsets.zero,
-  }) : super(key: key);
-
   @override
   _IntlPhoneFieldState createState() => _IntlPhoneFieldState();
 }
@@ -315,7 +312,9 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
 
       // remove country code from the initial number value
       number = number.replaceFirst(
-          RegExp("^${_selectedCountry.fullCountryCode}"), "");
+        RegExp('^${_selectedCountry.fullCountryCode}'),
+        '',
+      );
     } else {
       _selectedCountry = _countryList.firstWhere(
         (item) => item.code == (widget.initialCountryCode ?? 'US'),
@@ -325,10 +324,14 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
       // remove country code from the initial number value
       if (number.startsWith('+')) {
         number = number.replaceFirst(
-            RegExp("^\\+${_selectedCountry.fullCountryCode}"), "");
+          RegExp('^\\+${_selectedCountry.fullCountryCode}'),
+          '',
+        );
       } else {
         number = number.replaceFirst(
-            RegExp("^${_selectedCountry.fullCountryCode}"), "");
+          RegExp('^${_selectedCountry.fullCountryCode}'),
+          '',
+        );
       }
     }
 
@@ -345,7 +348,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         validatorMessage = value;
       } else {
         (value as Future).then((msg) {
-          validatorMessage = msg;
+          validatorMessage = msg as String?;
         });
       }
     }
@@ -371,7 +374,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         ),
       ),
     );
-    if (this.mounted) setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -448,6 +451,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         decoration: widget.dropdownDecoration,
         child: InkWell(
           borderRadius: widget.dropdownDecoration.borderRadius as BorderRadius?,
+          onTap: widget.enabled ? _changeCountry : null,
           child: Padding(
             padding: widget.flagsButtonPadding,
             child: Row(
@@ -458,7 +462,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
                     widget.showDropdownIcon &&
                     widget.dropdownIconPosition == IconPosition.leading) ...[
                   widget.dropdownIcon,
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                 ],
                 if (widget.showCountryFlag) ...[
                   Image.asset(
@@ -466,7 +470,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
                     package: 'intl_phone_field',
                     width: 32,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                 ],
                 FittedBox(
                   child: Text(
@@ -477,14 +481,13 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
                 if (widget.enabled &&
                     widget.showDropdownIcon &&
                     widget.dropdownIconPosition == IconPosition.trailing) ...[
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   widget.dropdownIcon,
                 ],
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
               ],
             ),
           ),
-          onTap: widget.enabled ? _changeCountry : null,
         ),
       ),
     );
