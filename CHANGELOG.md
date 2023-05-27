@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [3.3.0] - Release
+
+- Add intl to coutry name when search. This from PR #243
+- Fix some mix/max length
+
 ## [3.2.0] - Release
 
 - Add support to Flutter 3.10.0 and Dart 3.0
@@ -53,21 +58,21 @@
 - Update maximum length of phone numbers of several countries.
 - Add dropDownArrowIcon parameter.
 
-## [2.0.0] - Null-Safe Compatibility.
+## [2.0.0] - Null-Safe Compatibility
 
 - Package is now null-safe.
 - onCountryChanged param added.
 - Other Fixes.
 
-## [1.4.2] - Improved Documentation.
+## [1.4.2] - Improved Documentation
 
 - Color change for Dropdown Icon and Dialog is now added.
 
-## [1.4.1] - Improved Documentation.
+## [1.4.1] - Improved Documentation
 
 - More Documentation added for properties.
 
-## [1.4.0] - Bug Fixes and improvements.
+## [1.4.0] - Bug Fixes and improvements
 
 - Searchbar label text can be now set.
 - Picker popup bug fixed.
