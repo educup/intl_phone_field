@@ -49,6 +49,7 @@ class IntlPhoneField extends StatefulWidget {
     this.showCursor = true,
     this.pickerDialogStyle,
     this.flagsButtonMargin = EdgeInsets.zero,
+    this.languageCode = 'en',
   });
 
   /// Whether to hide the text being edited (e.g., for passwords).
@@ -272,6 +273,9 @@ class IntlPhoneField extends StatefulWidget {
   /// If unset, defaults to [EdgeInsets.zero].
   final EdgeInsets flagsButtonMargin;
 
+  /// Lenguage of the contry name in the shearch
+  final String languageCode;
+
   @override
   _IntlPhoneFieldState createState() => _IntlPhoneFieldState();
 }
@@ -348,6 +352,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
 
   Future<void> _changeCountry() async {
     filteredCountries = _countryList;
+
     await showDialog(
       context: context,
       useRootNavigator: false,
@@ -361,6 +366,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
                 ),
                 width: 400,
               ),
+          languageCode: widget.languageCode,
           filteredCountries: filteredCountries,
           countryList: _countryList,
           selectedCountry: _selectedCountry,

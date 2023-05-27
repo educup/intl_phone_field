@@ -44,12 +44,14 @@ class CountryPickerDialog extends StatefulWidget {
     required this.selectedCountry,
     required this.filteredCountries,
     this.style,
+    this.languageCode = 'en',
   });
   final List<Country> countryList;
   final Country selectedCountry;
   final ValueChanged<Country> onCountryChanged;
   final List<Country> filteredCountries;
   final PickerDialogStyle? style;
+  final String languageCode;
 
   @override
   _CountryPickerDialogState createState() => _CountryPickerDialogState();
@@ -91,17 +93,7 @@ class _CountryPickerDialogState extends State<CountryPickerDialog> {
                 cursorColor: widget.style?.searchFieldCursorColor,
                 decoration: widget.style?.searchFieldInputDecoration,
                 onChanged: (value) {
-                  _filteredCountries = isNumeric(value)
-                      ? widget.countryList
-                          .where((country) => country.dialCode.contains(value))
-                          .toList()
-                      : widget.countryList
-                          .where(
-                            (country) => country.name
-                                .toLowerCase()
-                                .contains(value.toLowerCase()),
-                          )
-                          .toList();
+                  _filteredCountries = widget.countryList.stringSearch(value);
                   if (mounted) setState(() {});
                 },
               ),
@@ -121,7 +113,8 @@ class _CountryPickerDialogState extends State<CountryPickerDialog> {
                       ),
                       contentPadding: widget.style?.listTilePadding,
                       title: Text(
-                        _filteredCountries[index].name,
+                        _filteredCountries[index]
+                            .localizedName(widget.languageCode),
                         style: widget.style?.countryNameStyle ??
                             const TextStyle(fontWeight: FontWeight.w700),
                       ),
