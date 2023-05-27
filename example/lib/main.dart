@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 void main() {
@@ -57,6 +58,13 @@ class _MyAppState extends State<MyApp> {
                     border: OutlineInputBorder(
                       borderSide: BorderSide(),
                     ),
+                  ),
+                  pickerDialogStyle: PickerDialogStyle(
+                    searchFieldInputDecoration: InputDecoration(
+                      hintText: 'Search country',
+                      suffixIcon: const Icon(Icons.search),
+                    ),
+                    width: 400,
                   ),
                   onChanged: (phone) {
                     print(phone.completeNumber);

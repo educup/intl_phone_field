@@ -39,7 +39,6 @@ class PickerDialogStyle {
 class CountryPickerDialog extends StatefulWidget {
   const CountryPickerDialog({
     super.key,
-    required this.searchText,
     required this.countryList,
     required this.onCountryChanged,
     required this.selectedCountry,
@@ -49,7 +48,6 @@ class CountryPickerDialog extends StatefulWidget {
   final List<Country> countryList;
   final Country selectedCountry;
   final ValueChanged<Country> onCountryChanged;
-  final String searchText;
   final List<Country> filteredCountries;
   final PickerDialogStyle? style;
 
@@ -91,11 +89,7 @@ class _CountryPickerDialogState extends State<CountryPickerDialog> {
               padding: widget.style?.searchFieldPadding ?? EdgeInsets.zero,
               child: TextField(
                 cursorColor: widget.style?.searchFieldCursorColor,
-                decoration: widget.style?.searchFieldInputDecoration ??
-                    InputDecoration(
-                      suffixIcon: const Icon(Icons.search),
-                      labelText: widget.searchText,
-                    ),
+                decoration: widget.style?.searchFieldInputDecoration,
                 onChanged: (value) {
                   _filteredCountries = isNumeric(value)
                       ? widget.countryList

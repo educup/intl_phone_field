@@ -33,8 +33,6 @@ class IntlPhoneField extends StatefulWidget {
     this.inputFormatters,
     this.enabled = true,
     this.keyboardAppearance,
-    @Deprecated('Use searchFieldInputDecoration of PickerDialogStyle instead')
-        this.searchText = 'Search country',
     this.dropdownIconPosition = IconPosition.leading,
     this.dropdownIcon = const Icon(Icons.arrow_drop_down),
     this.autofocus = false,
@@ -208,12 +206,6 @@ class IntlPhoneField extends StatefulWidget {
   /// {@macro flutter.widgets.editableText.inputFormatters}
   final List<TextInputFormatter>? inputFormatters;
 
-  /// The text that describes the search input field.
-  ///
-  /// When the input field is empty and unfocused, the label is displayed on top of the input field (i.e., at the same location on the screen where text may be entered in the input field).
-  /// When the input field receives focus (or if the field is non-empty), the label moves above (i.e., vertically adjacent to) the input field.
-  final String searchText;
-
   /// Position of an icon [leading, trailing]
   final IconPosition dropdownIconPosition;
 
@@ -347,7 +339,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
       if (value is String) {
         validatorMessage = value;
       } else {
-        (value as Future).then((msg) {
+        (value as Future?)?.then((msg) {
           validatorMessage = msg as String?;
         });
       }
@@ -361,9 +353,15 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
       useRootNavigator: false,
       builder: (context) => StatefulBuilder(
         builder: (ctx, setState) => CountryPickerDialog(
-          style: widget.pickerDialogStyle,
+          style: widget.pickerDialogStyle ??
+              PickerDialogStyle(
+                searchFieldInputDecoration: const InputDecoration(
+                  hintText: 'Search country',
+                  suffixIcon: Icon(Icons.search),
+                ),
+                width: 400,
+              ),
           filteredCountries: filteredCountries,
-          searchText: widget.searchText,
           countryList: _countryList,
           selectedCountry: _selectedCountry,
           onCountryChanged: (Country country) {
