@@ -340,7 +340,7 @@ const List<Country> countries = [
     flag: "🇦🇷",
     code: "AR",
     dialCode: "54",
-    minLength: 12,
+    minLength: 10,
     maxLength: 12,
   ),
   Country(
@@ -1363,7 +1363,7 @@ const List<Country> countries = [
     flag: "🇨🇳",
     code: "CN",
     dialCode: "86",
-    minLength: 12,
+    minLength: 11,
     maxLength: 12,
   ),
   Country(
@@ -7548,6 +7548,7 @@ class Country {
     required this.maxLength,
     this.regionCode = "",
   });
+
   final String name;
   final Map<String, String> nameTranslations;
   final String flag;
