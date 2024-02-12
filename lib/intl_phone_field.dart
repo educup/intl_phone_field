@@ -50,6 +50,7 @@ class IntlPhoneField extends StatefulWidget {
     this.pickerDialogStyle,
     this.flagsButtonMargin = EdgeInsets.zero,
     this.languageCode = 'en',
+    this.showDialCode = true,
   });
 
   /// Whether to hide the text being edited (e.g., for passwords).
@@ -276,6 +277,9 @@ class IntlPhoneField extends StatefulWidget {
   /// Lenguage of the contry name in the shearch
   final String languageCode;
 
+  /// Whether to show the dial code
+  final bool showDialCode;
+
   @override
   _IntlPhoneFieldState createState() => _IntlPhoneFieldState();
 }
@@ -476,12 +480,13 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
                   ),
                   const SizedBox(width: 8),
                 ],
-                FittedBox(
-                  child: Text(
-                    '+${_selectedCountry.dialCode}',
-                    style: widget.dropdownTextStyle,
+                if (widget.showDialCode)
+                  FittedBox(
+                    child: Text(
+                      '+${_selectedCountry.dialCode}',
+                      style: widget.dropdownTextStyle,
+                    ),
                   ),
-                ),
                 if (widget.enabled &&
                     widget.showDropdownIcon &&
                     widget.dropdownIconPosition == IconPosition.trailing) ...[
