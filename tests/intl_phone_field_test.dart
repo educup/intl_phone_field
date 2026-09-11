@@ -63,4 +63,42 @@ void main() {
         expect(countryCodeFinder, findsOneWidget);
         expect(numberFinder, findsOneWidget);
       });
+
+  testWidgets('country search with no matches shows empty state',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const TestWidget(
+      phoneNumber: '+12025550123',
+      countryCode: 'US',
+    ),);
+
+    await tester.tap(find.text('+1'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextField).last, 'zzzznotacountry');
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('No results'), findsOneWidget);
+  });
+
+  testWidgets('empty countries allow-list does not throw',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: IntlPhoneField(
+            initialCountryCode: 'US',
+            countries: [],
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('+1'), findsOneWidget);
+
+    await tester.tap(find.text('+1'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 }

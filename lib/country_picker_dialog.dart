@@ -100,40 +100,47 @@ class _CountryPickerDialogState extends State<CountryPickerDialog> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: _filteredCountries.length,
-                itemBuilder: (ctx, index) => Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Image.asset(
-                        'assets/flags/${_filteredCountries[index].code.toLowerCase()}.png',
-                        package: 'intl_phone_field',
-                        width: 32,
-                      ),
-                      contentPadding: widget.style?.listTilePadding,
-                      title: Text(
-                        _filteredCountries[index]
-                            .localizedName(widget.languageCode),
-                        style: widget.style?.countryNameStyle ??
-                            const TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      trailing: Text(
-                        '+${_filteredCountries[index].dialCode}',
-                        style: widget.style?.countryCodeStyle ??
-                            const TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      onTap: () {
-                        _selectedCountry = _filteredCountries[index];
-                        widget.onCountryChanged(_selectedCountry);
-                        Navigator.of(context).pop();
+              child: _filteredCountries.isEmpty
+                  ? const Center(child: Text('No results'))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _filteredCountries.length,
+                      itemBuilder: (ctx, index) {
+                        if (index < 0 || index >= _filteredCountries.length) {
+                          return const SizedBox.shrink();
+                        }
+                        final country = _filteredCountries[index];
+                        return Column(
+                          children: <Widget>[
+                            ListTile(
+                              leading: Image.asset(
+                                'assets/flags/${country.code.toLowerCase()}.png',
+                                package: 'intl_phone_field',
+                                width: 32,
+                              ),
+                              contentPadding: widget.style?.listTilePadding,
+                              title: Text(
+                                country.localizedName(widget.languageCode),
+                                style: widget.style?.countryNameStyle ??
+                                    const TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              trailing: Text(
+                                '+${country.dialCode}',
+                                style: widget.style?.countryCodeStyle ??
+                                    const TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              onTap: () {
+                                _selectedCountry = country;
+                                widget.onCountryChanged(_selectedCountry);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            widget.style?.listTileDivider ??
+                                const Divider(thickness: 1),
+                          ],
+                        );
                       },
                     ),
-                    widget.style?.listTileDivider ??
-                        const Divider(thickness: 1),
-                  ],
-                ),
-              ),
             ),
           ],
         ),
