@@ -284,6 +284,16 @@ class IntlPhoneField extends StatefulWidget {
   _IntlPhoneFieldState createState() => _IntlPhoneFieldState();
 }
 
+List<Country> _resolveCountryList(List<String>? countryCodes) {
+  if (countryCodes == null || countryCodes.isEmpty) {
+    return countries;
+  }
+  final filtered = countries
+      .where((country) => countryCodes.contains(country.code))
+      .toList();
+  return filtered.isEmpty ? countries : filtered;
+}
+
 class _IntlPhoneFieldState extends State<IntlPhoneField> {
   late List<Country> _countryList;
   late Country _selectedCountry;
@@ -295,11 +305,7 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
   @override
   void initState() {
     super.initState();
-    _countryList = widget.countries == null
-        ? countries
-        : countries
-            .where((country) => widget.countries!.contains(country.code))
-            .toList();
+    _countryList = _resolveCountryList(widget.countries);
     filteredCountries = _countryList;
     number = widget.initialValue ?? '';
     if (widget.initialCountryCode == null && number.startsWith('+')) {
@@ -355,6 +361,9 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
   }
 
   Future<void> _changeCountry() async {
+    if (_countryList.isEmpty) {
+      return;
+    }
     filteredCountries = _countryList;
 
     await showDialog(

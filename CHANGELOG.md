@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+- Show an empty state in the country picker when search matches nothing
+- Fall back to the full country list when the allow-list is empty
+
 ## [3.3.0] - Release
 
 - Add intl to coutry name when search. This from PR #243
