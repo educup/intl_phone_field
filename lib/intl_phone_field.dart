@@ -450,6 +450,8 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         return validatorMessage;
       },
       maxLength: widget.disableLengthCheck ? null : _selectedCountry.maxLength,
+      maxLengthEnforcement:
+          _selectedCountry.code == 'PE' ? MaxLengthEnforcement.none : null,
       keyboardType: widget.keyboardType,
       inputFormatters:
           widget.inputFormatters ?? [FilteringTextInputFormatter.digitsOnly],
